@@ -1,0 +1,21 @@
+# Docker volumes & runtime data
+gitea_data/
+data/
+*.db
+
+# Secrets
+*.env
+.env
+app.ini
+
+# Logs
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+
+.env
+*.env
+secrets/

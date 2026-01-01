@@ -1,0 +1,35 @@
+
+
+version: "3.8"
+
+services:
+  gitea:
+    image: gitea/gitea:latest
+    container_name: gitea
+    restart: always
+    ports:
+      - target: 3000
+        published: 3000
+        mode: host
+      - target: 22
+        published: 222
+        mode: host
+
+    volumes:
+      - gitea_data:/data
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+
+      # Mail configuration
+      - GITEA__mailer__ENABLED=true
+      - GITEA__mailer__PROTOCOL=smtps
+      - GITEA__mailer__SMTP_ADDR=smtp.gmail.com
+      - GITEA__mailer__SMTP_PORT=465
+      - GITEA__mailer__USER=joeljoshyv@gmail.com
+      - GITEA__mailer__USER=${GITEA_SMTP_USER}
+      - GITEA__mailer__PASSWD=${GITEA_SMTP_PASS}
+
+
+volumes:
+  gitea_data:
