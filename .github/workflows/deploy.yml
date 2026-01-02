@@ -1,4 +1,4 @@
-name: Gitea Deployment
+name: Deploy Gitea
 
 on:
   push:
@@ -7,9 +7,17 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
+
     steps:
       - uses: actions/checkout@v4
-      - run: |
-          export GITEA_SMTP_USER="${{ secrets.GITEA_SMTP_USER }}"
-          export GITEA_SMTP_PASS="${{ secrets.GITEA_SMTP_PASS }}"
-          docker stack deploy -c docker-compose.yml gitea
+
+      - name: Generate .env from GitHub Secrets
+        run: |
+          cat <<EOF > .env
+          GITEA__mailer__USER=${{secrets.SMTP_USER}}
+          GITEA__mailer__PASSWD=${{secrets.SMTP_PASS}}
+
+          EOF
+
+      - name: Deploy to Docker Swarm
+        run: docker stack deploy -c docker-compose.yml gitea
