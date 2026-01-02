@@ -16,6 +16,8 @@ jobs:
           # Using echo is safer than EOF in YAML files
           echo "GITEA__mailer__USER=${{ secrets.SMTP_USER }}" > .env
           echo "GITEA__mailer__PASSWD=${{ secrets.SMTP_PASS }}" >> .env
+          # We reuse the SMTP_USER secret to set the "From" address automatically
+          echo "GITEA__mailer__FROM=${{ secrets.SMTP_USER }}" >> .env
 
       - name: Deploy to Docker Swarm
         # This will update the service with zero downtime
