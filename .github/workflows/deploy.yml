@@ -13,11 +13,14 @@ jobs:
 
       - name: Generate .env from GitHub Secrets
         run: |
-          cat <<EOF > .env
-          GITEA__mailer__USER=${{secrets.SMTP_USER}}
-          GITEA__mailer__PASSWD=${{secrets.SMTP_PASS}}
-
-          EOF
+          # Using echo is safer than EOF in YAML files
+          echo "GITEA__mailer__USER=${{ secrets.SMTP_USER }}" > .env
+          echo "GITEA__mailer__PASSWD=${{ secrets.SMTP_PASS }}" >> .env
 
       - name: Deploy to Docker Swarm
+        # This will update the service with zero downtime
         run: docker stack deploy -c docker-compose.yml gitea
+
+      - name: Cleanup Secrets
+        if: always()
+        run: rm -f .env
