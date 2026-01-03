@@ -15,20 +15,24 @@ services:
     volumes:
       - gitea_data:/data
 
-    env_file:
-      - .env
-
 
     environment:
       - USER_UID=1000
       - USER_GID=1000
-      - GITEA__server__APP_NAME=GITEA – CI/CD PIPELINE TEST
+      - GITEA__server__APP_NAME=GITEA CI/CD PIPELINE TEST
       - GITEA__mailer__ENABLED=true
       - GITEA__mailer__PROTOCOL=smtps
       - GITEA__mailer__SMTP_ADDR=smtp.gmail.com
       - GITEA__mailer__SMTP_PORT=465
       - GITEA__server__ROOT_URL=http://localhost:3000/
       - GITEA__server__DOMAIN=localhost
+
+      # (Variable Substitution)
+      # This pulls the values directly from the Runner's shell environment
+      - GITEA__mailer__USER=${SMTP_USER}
+      - GITEA__mailer__PASSWD=${SMTP_PASS}
+      - GITEA__mailer__FROM=${SMTP_USER}
+
 
 volumes:
   gitea_data:
