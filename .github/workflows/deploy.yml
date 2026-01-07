@@ -18,5 +18,6 @@ jobs:
           # We inject the secrets into the shell environment here
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          GITEA_METRICS_TOKEN: ${{secrets.GITEA_METRICS_TOKEN}}
     
         run: docker stack deploy -c docker-compose.yml gitea
